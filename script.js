@@ -1,18 +1,11 @@
-var speechRecognition = window.webkitSpeechRecognition
-var recognition = new speechRecognition()
-var voices = window.speechSynthesis.getVoices();
-var msg = new SpeechSynthesisUtterance({
-    voice: voices[3],
-    lang: 'en-UK',
-    rate: .9,
-    pitch: 1
-});
-var textbox = $("#textbox")
-var textbox2 = $("#textbox2")
-var instructions = $("#instructions")
-var roboName = "RoboBuddy"
-var message = ''
-
+let speechRecognition = window.webkitSpeechRecognition
+let recognition = new speechRecognition()
+let msg = new SpeechSynthesisUtterance()
+let voices = window.speechSynthesis.getVoices();
+let textbox = $("#textbox")
+let textbox2 = $("#textbox2")
+let instructions = $("#instructions")
+let roboName = "RoboBuddy"
 recognition.continuous = true
 
 recognition.onstart = function () {
@@ -24,25 +17,20 @@ recognition.onspeechend = function () {
     recognition.start()
 }
 
+recognition.addEventListener('end', recognition.start);
+
 recognition.onerror = function () {
     instructions.text("Error")
 }
 
 recognition.onresult = function (event) {
-    var current = event.resultIndex;
-    var transcript = event.results[current][0].transcript
+    let current = event.resultIndex;
+    let message = event.results[current][0].transcript
     textbox2.val("")
-
-    message = ''
-    message += transcript
-
+    
     textbox.val(message)
-
-    message = message.toLowerCase()
     message = simplify(message)
-    message = message.replace(/\s\s+/g,' ');
-    message = message.trim()
- 
+    
     conversation(message)
 }
 
@@ -50,13 +38,7 @@ $("#start-btn").click(function (event) {
     recognition.start()
 })
 
-function say(result){
-    textbox2.val(result)
-    msg.text = result
-    speechSynthesis.speak(msg);
-}
-
-var map = new Map([
+let map = new Map([
     ["how are","I am well today, How are you?"],
     ["great"," "],
     ["well"," "],
@@ -119,10 +101,22 @@ function remove(string, stringSplit, i){
 
 
 function simplify(message){
-    let mapObj = {hello:"hi",hey:"hi",greetings:"hi",is:'',the:'',i:'',a:'',you:''};
+    let mapObj = {hello:"hi",hey:"hi",greetings:"hi",is:'',i:'',the:'',a:'',you:''};
     let re = new RegExp("\\b(?:" + Object.keys(mapObj).join("|") + ")\\b","gi");
     message = message.replace(re, function(matched){
-        return mapObj[matched];
+        return mapObj[matched.toLowerCase()];
     });
+    message = message.replace(/\s\s+/g,' ').trim().toLowerCase()
     return message
+}
+
+function say(result){
+    textbox2.val(result)
+    let voices = window.speechSynthesis.getVoices();
+    msg.voice = voices[3]
+    msg.lang = 'en-UK'
+    msg.rate = .9
+    msg.pitch = 1
+    msg.text = result
+    speechSynthesis.speak(msg);
 }
