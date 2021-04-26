@@ -69,7 +69,7 @@ function testForMessage(string){
             }
         }
     }
-    say("I don't understand")
+    say("I'm sorry but I am having trouble understanding please rephrase")
 }
 
 function remove(string, stringSplit, i){
@@ -80,7 +80,7 @@ function remove(string, stringSplit, i){
 }
 
 function simplify(message){
-    let mapObj = {hello:"hi",hey:"hi",greetings:"hi",is:'',i:'',the:'',a:'',you:''}
+    let mapObj = {hello:"hi",hey:"hi",greetings:"hi",is:'',i:'',the:'',a:'',of:'',are:''}
     let re = new RegExp("\\b(?:" + Object.keys(mapObj).join("|") + ")\\b","gi")
     message = message.replace(re, function(matched){
         return mapObj[matched.toLowerCase()]
@@ -101,7 +101,7 @@ function say(result){
 }
 
 let map = new Map([
-    ["how are","I am well today, How are you?"],
+    ["how you","I am well today, How are you?"],
     ["great"," "],
     ["well"," "],
     ["nice"," "],
@@ -111,7 +111,7 @@ let map = new Map([
     ["what happens if divide by zero","the world explodes"],
     ["play bee movie","According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible."],
     ["carrot","a carrot is a carrot and a carrot is a carrot"],
-    ["did ever hear tragedy of darth plagueis wise","no"],
+    ["did you ever hear tragedy of darth plagueis wise","no"],
     ["thought not it's not story jedi would tell it's sith legend darth plagueis was dark lord of sith so powerful and so wise he could use force to influence midi-chlorians to create life he had such knowledge of dark side he could even keep ones he cared about from dying","he could actually save people from death"],
     ["dark side of force pathway to many abilities some consider to be unnatural","what happened to him"],
     ["he became so powerful that only thing he was afraid of was losing his power which eventually of course he did unfortunately he taught his apprentice everything he knew then his apprentice killed him in his sleep ironic he could save others from death but not himself","is it possible to learn this power"],
