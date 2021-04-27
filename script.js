@@ -45,31 +45,8 @@ function conversation(message){
         map.set("hi",`Hello I am ${roboName}`)
         return
     }
-    testForMessage(message)
-}
-
-function testForMessage(string){
-    let stringSplit = string.split(' ')
-    if (map.get(string)) {
-        say(map.get(string))
-        return
-    }
-    for (let i = 0; i < stringSplit.length; i++){
-        let stringWordRemoved = remove(string, stringSplit, i)
-        if(map.get(stringWordRemoved)) {
-            say(map.get(stringWordRemoved))
-            return
-        }
-        let stringSplit2 = stringWordRemoved.split(' ')
-        for (let j = 0; j < stringSplit2.length; j++){
-            let stringTwoRemoved = remove(stringWordRemoved, stringSplit2, j)
-            if (map.get(stringTwoRemoved)) {
-                say(map.get(stringTwoRemoved))
-                return
-            }
-        }
-    }
-    say("I'm sorry but I am having trouble understanding please rephrase")
+    checkAllInputs(message)
+    //testForMessage(message)
 }
 
 function remove(string, stringSplit, i){
@@ -98,6 +75,18 @@ function say(result){
     msg.pitch = 1
     msg.text = result
     speechSynthesis.speak(msg)
+}
+
+function checkAllInputs(string){
+    let keys = Array.from(map.keys())
+    for (let i = 0; i < keys.length; i++){
+        let re = new RegExp("(?=.* " + keys[i].replace(' '," )(?=.* ") + " ).*")
+        if (re.test(` ${string} `)){
+            say(map.get(keys[i]))
+            return
+        }
+    }
+    say("I'm sorry but I am having trouble understanding please rephrase")
 }
 
 let map = new Map([

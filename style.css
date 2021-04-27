@@ -1,0 +1,32 @@
+body {
+    background-color: #252424;
+  }
+
+h1 {
+    color: red;
+    position: relative;
+    text-align: center;
+}
+
+textarea {
+    position: relative;
+    left: 30%;
+    width: 40%;
+    height: 200px;
+    margin: auto;
+    text-align: center;
+}
+
+#instructions {
+    position: relative;
+    text-align: center;
+    font-size: larger;
+}
+
+.btn {
+    background-color: red;
+    width: 90%;
+    height: 100px;
+    position: relative;
+    left: 5%;
+}
