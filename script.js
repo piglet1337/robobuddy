@@ -26,8 +26,8 @@ recognition.onerror = function () {
 recognition.onresult = function (event) {
     let current = event.resultIndex
     let message = event.results[current][0].transcript
-    textbox2.val("")
     
+    textbox2.val("")
     textbox.val(message)
     message = simplify(message)
     
@@ -39,8 +39,8 @@ $("#start-btn").click(function (event) {
 })
 
 function conversation(message){
-    if (message.startsWith("can change your name to ")){
-        roboName = message.substring(24)
+    if (message.startsWith("can you change your name to ")){
+        roboName = message.substring(28)
         say(`Ok I am now ${roboName}`)
         map.set("hi",`Hello I am ${roboName}`)
         return
@@ -92,7 +92,7 @@ function simplify(message){
 function say(result){
     textbox2.val(result)
     let voices = window.speechSynthesis.getVoices()
-    msg.voice = voices[3]
+    //msg.voice = voices[3]
     msg.lang = 'en-UK'
     msg.rate = .9
     msg.pitch = 1
