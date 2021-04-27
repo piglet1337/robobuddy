@@ -31,23 +31,12 @@ recognition.onresult = function (event) {
     textbox.val(message)
     message = simplify(message)
     
-    conversation(message)
+    checkAllInputs(message)
 }
 
 $("#start-btn").click(function (event) {
     recognition.start()
 })
-
-function conversation(message){
-    if (message.startsWith("can you change your name to ")){
-        roboName = message.substring(28)
-        say(`Ok I am now ${roboName}`)
-        map.set("hi",`Hello I am ${roboName}`)
-        return
-    }
-    checkAllInputs(message)
-    //testForMessage(message)
-}
 
 function remove(string, stringSplit, i){
     let newString = string.replace(stringSplit[i],'')
@@ -63,10 +52,11 @@ function simplify(message){
         return mapObj[matched.toLowerCase()]
     })
     message = message.replace(/\s\s+/g,' ').trim().toLowerCase()
+    textbox.val(message)
     return message
 }
 
-function say(result){
+function say(result, string){
     textbox2.val(result)
     let voices = window.speechSynthesis.getVoices()
     //msg.voice = voices[3]
@@ -74,15 +64,25 @@ function say(result){
     msg.rate = .9
     msg.pitch = 1
     msg.text = result
+    if (result === "NAMECHANGE"){
+        roboName = string.split(" ").pop()
+        roboName = roboName.charAt(0).toUpperCase() + roboName.slice(1)
+        textbox2.val(`Ok I am now ${roboName}`)
+        msg.text = (`Ok I am now ${roboName}`)
+        map.set("hi",`Hello I am ${roboName}`)
+        document.getElementsByClassName("text-center mt-5")[0].innerHTML = `${roboName}`
+    }
     speechSynthesis.speak(msg)
 }
 
 function checkAllInputs(string){
-    let keys = Array.from(map.keys())
+    let keys = Array.from(map.keys()).sort(function(a, b){
+        return b.split(' ').length - a.split(' ').length
+    })
     for (let i = 0; i < keys.length; i++){
         let re = new RegExp("(?=.* " + keys[i].replace(' '," )(?=.* ") + " ).*")
         if (re.test(` ${string} `)){
-            say(map.get(keys[i]))
+            say(map.get(keys[i]),string)
             return
         }
     }
@@ -105,5 +105,6 @@ let map = new Map([
     ["dark side of force pathway to many abilities some consider to be unnatural","what happened to him"],
     ["he became so powerful that only thing he was afraid of was losing his power which eventually of course he did unfortunately he taught his apprentice everything he knew then his apprentice killed him in his sleep ironic he could save others from death but not himself","is it possible to learn this power"],
     ["not from jedi","end scene"],
-    ["hi",`Hello I am ${roboName}`]
+    ["hi",`Hello I am ${roboName}`],
+    ["change your name","NAMECHANGE"]
 ])
