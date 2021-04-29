@@ -12,11 +12,6 @@ recognition.onstart = function () {
     instructions.text("Voice recognition is on")
 }
 
-recognition.onspeechend = function () {
-    instructions.text("No Activity")
-    recognition.start()
-}
-
 recognition.addEventListener('end', recognition.start)
 
 recognition.onerror = function () {
@@ -26,24 +21,15 @@ recognition.onerror = function () {
 recognition.onresult = function (event) {
     let current = event.resultIndex
     let message = event.results[current][0].transcript
-    
     textbox2.val("")
     textbox.val(message)
     message = simplify(message)
-    
     checkAllInputs(message)
 }
 
 $("#start-btn").click(function (event) {
     recognition.start()
 })
-
-function remove(string, stringSplit, i){
-    let newString = string.replace(stringSplit[i],'')
-    newString = newString.trim()
-    newString = newString.replace(/\s\s+/g, ' ') 
-    return newString
-}
 
 function simplify(message){
     let mapObj = {hello:"hi",hey:"hi",greetings:"hi",is:'',i:'',the:'',a:'',of:'',are:''}
