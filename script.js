@@ -37,10 +37,9 @@ function say(result, string){
     textbox2.val(result)
     const voices = window.speechSynthesis.getVoices()
     const msg = new SpeechSynthesisUtterance(result)
-    //msg.voice = voices[3]
+    msg.voice = voices[11]
     if (result === "NAMECHANGE"){
-        roboName = string.split(" ").pop()
-        roboName = roboName.charAt(0).toUpperCase() + roboName.slice(1)
+        roboName = string.split(" ").pop().charAt(0).toUpperCase() + string.split(' ').pop().slice(1)
         textbox2.val(`Ok I am now ${roboName}`)
         msg.text = (`Ok I am now ${roboName}`)
         map.set("hi",`Hello I am ${roboName}`)
@@ -51,10 +50,10 @@ function say(result, string){
 
 function checkAllInputs(string, map){
     const keys = Array.from(map.keys()).sort( (a, b) => b.split(' ').length - a.split(' ').length)
-    for (let i = 0; i < keys.length; i++){
-        const re = new RegExp("(?=.* " + keys[i].replace(' '," )(?=.* ") + " ).*")
+    for (key of keys){
+        const re = new RegExp("(?=.* " + key.replace(' '," )(?=.* ") + " ).*")
         if (re.test(` ${string} `)){
-            say(map.get(keys[i]),string)
+            say(map.get(key),string)
             return
         }
     }
