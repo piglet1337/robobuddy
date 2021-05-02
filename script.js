@@ -37,7 +37,7 @@ function say(result, string){
     textbox2.val(result)
     const voices = window.speechSynthesis.getVoices()
     const msg = new SpeechSynthesisUtterance(result)
-    msg.voice = voices[11]
+    //msg.voice = voices[11]
     if (result === "NAMECHANGE"){
         roboName = string.split(" ").pop().charAt(0).toUpperCase() + string.split(' ').pop().slice(1)
         textbox2.val(`Ok I am now ${roboName}`)
