@@ -4,13 +4,24 @@ const textbox = $("#textbox")
 const textbox2 = $("#textbox2")
 const instructions = $("#instructions")
 let roboName = "RoboBuddy"
+let notSpeaking = true
+function voiceEndCallback() {
+    notSpeaking = true
+    recognition.start()
+}
+ 
+const parameters = {
+    onend: voiceEndCallback
+}
 
 recognition.continuous = true
 //window.speechSynthesis.getVoices()
 
 recognition.onstart = () => instructions.text("Voice recognition is on")
 
-recognition.addEventListener('end', recognition.start)
+recognition.addEventListener('end', () => {
+    if (notSpeaking) recognition.start()
+})
 
 recognition.onerror = () => instructions.text("Error")
 
@@ -48,7 +59,9 @@ function say(result, string){
         document.getElementsByClassName("text-center mt-5")[0].innerHTML = `${roboName}`
     }
     //speechSynthesis.speak(msg)
-    responsiveVoice.speak(msg)
+    responsiveVoice.speak(msg, "UK English Female", parameters)
+    notSpeaking = false
+    recognition.stop()
 }
 
 function checkAllInputs(string, map){
