@@ -19,9 +19,7 @@ recognition.continuous = true
 
 recognition.onstart = () => instructions.text("Voice recognition is on")
 
-recognition.addEventListener('end', () => {
-    if (notSpeaking) recognition.start()
-})
+//recognition.addEventListener('end', recognition.start)
 
 recognition.onerror = () => instructions.text("Error")
 
