@@ -6,7 +6,7 @@ const instructions = $("#instructions")
 let roboName = "RoboBuddy"
 
 recognition.continuous = true
-window.speechSynthesis.getVoices()
+//window.speechSynthesis.getVoices()
 
 recognition.onstart = () => instructions.text("Voice recognition is on")
 
@@ -35,17 +35,20 @@ function simplify(message){
 
 function say(result, string){
     textbox2.val(result)
-    const voices = window.speechSynthesis.getVoices()
-    const msg = new SpeechSynthesisUtterance(result)
+    let msg = result
+    //const voices = window.speechSynthesis.getVoices()
+    //const msg = new SpeechSynthesisUtterance(result)
     //msg.voice = voices[11]
     if (result === "NAMECHANGE"){
         roboName = string.split(" ").pop().charAt(0).toUpperCase() + string.split(' ').pop().slice(1)
         textbox2.val(`Ok I am now ${roboName}`)
-        msg.text = (`Ok I am now ${roboName}`)
+        //msg.text = (`Ok I am now ${roboName}`)
+        msg = `Ok I am now ${roboName}`
         map.set("hi",`Hello I am ${roboName}`)
         document.getElementsByClassName("text-center mt-5")[0].innerHTML = `${roboName}`
     }
-    speechSynthesis.speak(msg)
+    //speechSynthesis.speak(msg)
+    responsiveVoice.speak(msg)
 }
 
 function checkAllInputs(string, map){
