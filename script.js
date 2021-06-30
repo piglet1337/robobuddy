@@ -10,6 +10,7 @@ const startBtn = $("#start-btn")
 let roboName = "RoboBuddy"
 let notSpeaking = true
 let recognitionOn = true
+let howAre = false
 //Creates parameters for different events with Responsive Voice.
 const parameters = {
     onend: voiceEndCallback
@@ -62,6 +63,11 @@ function simplify(message){
 
 function checkAllInputs(string, map){
     //gives the say function the maps output as well as the users message.
+    if (howAre){
+        say(`Do you know why you feel ${string}`)
+        howAre = false
+        return
+    }
     const keys = Array.from(map.keys()).sort( (a, b) => b.split(' ').length - a.split(' ').length)
     for (key of keys){
         const re = new RegExp("(?=.* " + key.replace(' '," )(?=.* ") + " ).*")
@@ -70,7 +76,7 @@ function checkAllInputs(string, map){
             return
         }
     }
-    say("I'm sorry but I am having trouble understanding please rephrase")
+    say("I'm sorry I didn't understand that")
 }
 
 function say(result, string){
@@ -84,6 +90,10 @@ function say(result, string){
         map.set("hi",`Hello I am ${roboName}`)
         document.getElementsByClassName("text-center mt-5")[0].innerHTML = `${roboName}`
     }
+    if (result === "HOWARE"){
+        howAre = true
+        msg = "I am well today, how are you?"
+    }
     responsiveVoice.speak(msg, "UK English Female", parameters)
     //Stops listening to user until it finishes speaking.
     notSpeaking = false
@@ -96,8 +106,8 @@ function voiceEndCallback() {
 }
 
 const map = new Map([
-    ["how you","I am well today, How are you?"],
-    ["great"," "],
+    ["how you","HOWARE"],
+    ["great","That's good. Do you know why you are feeling great?"],
     ["well"," "],
     ["nice"," "],
     ["good"," "],
